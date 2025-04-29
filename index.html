@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>React Comentarios</title>
+  <!-- React -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <!-- ReactDOM -->
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel para JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // Componente Greeting
+    function Greeting() {
+      return <h1>¡Hola, bienvenido a React!</h1>;
+    }
+
+    // Componente hijo: CommentForm
+    function CommentForm({ onAddComment }) {
+      const [comment, setComment] = React.useState("");
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (comment.trim() !== "") {
+          onAddComment(comment);
+          setComment(""); // limpiar campo
+        }
+      };
+
+      return (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Escribe tu comentario"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+          <button type="submit">Enviar comentario</button>
+        </form>
+      );
+    }
+
+    // Componente padre: App
+    function App() {
+      const [comments, setComments] = React.useState([]);
+
+      const addComment = (newComment) => {
+        setComments([...comments, newComment]);
+      };
+
+      return (
+        <div>
+          <Greeting />
+          <CommentForm onAddComment={addComment} />
+          <h2>Comentarios:</h2>
+          <ul>
+            {comments.map((c, index) => (
+              <li key={index}>{c}</li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    // Renderizado en el div root
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
