@@ -1,73 +1,139 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>React Comentarios</title>
+  <meta charset="UTF-8" />
+  <title>React Comentarios Dev Style</title>
   <!-- React -->
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <!-- ReactDOM -->
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-  <!-- Babel para JSX -->
+  <!-- Babel -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body>
+<body style="margin:0; background:#111; color:#eee; font-family: 'Courier New', monospace;">
   <div id="root"></div>
 
   <script type="text/babel">
-    // Componente Greeting
+    // Estilos
+    const containerStyle = {
+      maxWidth: "600px",
+      margin: "40px auto",
+      background: "#1e1e1e",
+      padding: "30px",
+      borderRadius: "12px",
+      boxShadow: "0 0 20px rgba(0,0,0,0.5)"
+    };
+
+    const headingStyle = {
+      fontSize: "26px",
+      marginBottom: "20px",
+      textAlign: "center",
+      color: "#00ffcc"
+    };
+
+    const inputStyle = {
+      width: "100%",
+      padding: "12px",
+      marginBottom: "15px",
+      background: "#333",
+      border: "1px solid #555",
+      color: "#eee",
+      borderRadius: "6px",
+      boxSizing: "border-box"
+    };
+
+    const buttonStyle = {
+      width: "100%",
+      backgroundColor: "#00ffcc",
+      color: "#111",
+      border: "none",
+      padding: "12px",
+      fontWeight: "bold",
+      borderRadius: "6px",
+      cursor: "pointer",
+      transition: "0.3s"
+    };
+
+    const buttonHoverStyle = {
+      backgroundColor: "#00ddb3"
+    };
+
+    const listStyle = {
+      listStyle: "none",
+      padding: 0,
+      marginTop: "20px"
+    };
+
+    const listItemStyle = {
+      background: "#222",
+      padding: "10px",
+      borderLeft: "4px solid #00ffcc",
+      marginBottom: "10px",
+      borderRadius: "4px",
+      color: "#ccc",
+      fontSize: "14px"
+    };
+
     function Greeting() {
-      return <h1>¡Hola, bienvenido a React!</h1>;
+      return <h1 style={headingStyle}>👨‍💻 ¡Bienvenido al Modo React!</h1>;
     }
 
-    // Componente hijo: CommentForm
     function CommentForm({ onAddComment }) {
       const [comment, setComment] = React.useState("");
+      const [hover, setHover] = React.useState(false);
 
       const handleSubmit = (e) => {
         e.preventDefault();
-        if (comment.trim() !== "") {
+        if (comment.trim()) {
           onAddComment(comment);
-          setComment(""); // limpiar campo
+          setComment("");
         }
       };
 
       return (
         <form onSubmit={handleSubmit}>
           <input
+            style={inputStyle}
             type="text"
-            placeholder="Escribe tu comentario"
+            placeholder="> Escribe tu comentario aquí"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
-          <button type="submit">Enviar comentario</button>
+          <button
+            type="submit"
+            style={hover ? { ...buttonStyle, ...buttonHoverStyle } : buttonStyle}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+          >
+            Enviar comentario
+          </button>
         </form>
       );
     }
 
-    // Componente padre: App
     function App() {
       const [comments, setComments] = React.useState([]);
 
-      const addComment = (newComment) => {
-        setComments([...comments, newComment]);
+      const addComment = (comment) => {
+        setComments([...comments, comment]);
       };
 
       return (
-        <div>
+        <div style={containerStyle}>
           <Greeting />
           <CommentForm onAddComment={addComment} />
-          <h2>Comentarios:</h2>
-          <ul>
-            {comments.map((c, index) => (
-              <li key={index}>{c}</li>
+          <ul style={listStyle}>
+            {comments.map((c, i) => (
+              <li key={i} style={listItemStyle}>
+                {`> ${c}`}
+              </li>
             ))}
           </ul>
         </div>
       );
     }
 
-    // Renderizado en el div root
-    const root = ReactDOM.createRoot(document.getElementById("root"));
+    const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
 </body>
